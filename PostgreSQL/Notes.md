@@ -112,5 +112,33 @@ FROM person
 GROUP BY country_of_birth
 HAVING COUNT(*) > 1;
 
+SELECT MAX(price) FROM car;
+SELECT MIN(price) FROM car;
+SELECT AVG(price) FROM car;
+SELECT ROUND(AVG(price)) FROM car;
+SELECT SUM(price) FROM car;
+SELECT make, SUM(price) FROM car GROUP BY make;
+
+SELECT make, price, price - (price * .10) FROM car;
+SELECT make, price, ROUND(price - (price * .10),2) discounted_price FROM car;
+
+SELECT COALESCE(null, 0, 33)
+SELECT COALESCE(email , 'Email not provided') FROM person;
+
+SELECT 10/0; -- ERROR
+SELECT 10 / NULLIF(0,0); -- NULL
+SELECT total_sales / NULLIF(total_customers, 0) FROM sales;
+
+
+SELECT NOW(); --  2026-11-02 07:47:51.409851+05:30
+SELECT NOW()::DATE; -- 2026-11-02
+SELECT NOW()::TIME; --  07:47:51.409851
+
+SELECT NOW() - INTERVAL '1 YEAR'; -- 2025-11-02 07:56:30.849778+05:30
+SELECT NOW() - INTERVAL '10 YEARS'; -- 2016-11-02 07:57:13.877961+05:30
+SELECT NOW() + INTERVAL '10 DAYS';
+
+SELECT first_name, date_of_birth, AGE(NOW(), date_of_birth) AS age FROM person;
+
 
 ```
