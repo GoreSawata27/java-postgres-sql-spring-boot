@@ -140,5 +140,40 @@ SELECT NOW() + INTERVAL '10 DAYS';
 
 SELECT first_name, date_of_birth, AGE(NOW(), date_of_birth) AS age FROM person;
 
+ ALTER TABLE person DROP CONSTRAINT person_pkey; -- to drop primary key
+ ALTER TABLE person DROP ADD PRIMARY KEY (id); -- to add primary key
+
+ DELETE FROM person WHERE id = 1;
+
+ALTER TABLE person
+ADD CONSTRAINT unique_email_address UNIQUE(email);
+
+ALTER TABLE person ADD UNIQUE(email);
+
+ALTER TABLE person
+ADD CONSTRAINT gender_constraint
+CHECK (gender = 'Female' OR gender = 'Male');
+
+UPDATE person SET email = 'saw@gmail.com' WHERE id = 30;
+UPDATE person SET email = 'saw@gmail.com', first_name = 'test'  WHERE id = 30;
+
+
+INSERT INTO person (
+    id, first_name, last_name, gender,
+    email, date_of_birth, country_of_birth
+)
+VALUES (
+    2017, 'Russ', 'Ruddock', 'Male',
+    'rruddock@hhs.gov', DATE '1952-09-25', 'Norway'
+)
+ON CONFLICT (id) DO NOTHING;
+
+
+INSERT INTO person (id, first_name, last_name, gender, email, date_of_birth, country_of_birth)
+VALUES (2017, 'Russ', 'Ruddock', 'Male', 'new@email.com', DATE '1952-09-25', 'Norway')
+ON CONFLICT (id)
+DO UPDATE SET email = EXCLUDED.email;
+
+
 
 ```
