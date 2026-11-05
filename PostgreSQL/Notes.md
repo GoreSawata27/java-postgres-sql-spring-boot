@@ -203,4 +203,85 @@ SELECT person.first_name, car.make, car.price FROM person JOIN car ON person.id 
 
 SELECT * FROM person LEFT JOIN car ON car.id = person.id;
 
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+SELECT uuid_generate_v4();
+
+CREATE TABLE car (
+    car_uid UUID NOT NULL PRIMARY KEY,
+    make VARCHAR(100) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    price NUMERIC(19, 2) NOT NULL
+);
+
+CREATE TABLE person (
+    person_uid UUID NOT NULL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    gender VARCHAR(7) NOT NULL,
+    email VARCHAR(100),
+    date_of_birth DATE NOT NULL,
+    country_of_birth VARCHAR(50) NOT NULL,
+    car_uid UUID REFERENCES car(car_uid),
+    UNIQUE(car_uid),
+    UNIQUE(email)
+);
+
+INSERT INTO person (
+    person_uid,
+    first_name,
+    last_name,
+    gender,
+    email,
+    date_of_birth,
+    country_of_birth
+)
+VALUES
+(uuid_generate_v4(), 'Fernanda', 'Beardon', 'Female',
+ 'fernandabe@is.gd', '1953-10-28', 'Comoros'),
+
+(uuid_generate_v4(), 'john', 'Colmore', 'Male',
+ NULL, '1921-04-03', 'Finland'),
+
+(uuid_generate_v4(), 'Adriana', 'Matuschek', 'Female',
+ 'amatuschek2@feedburner.com', '1965-02-28', 'Cameroon');
+
+
+INSERT INTO car (car_uid, make, model, price)
+VALUES
+(uuid_generate_v4(), 'Land Rover', 'Sterling', 87665.38),
+
+(uuid_generate_v4(), 'GMC', 'Acadia', 17662.69);
+
+UPDATE person
+SET car_uid = 'ac752f90-2174-4443-86ae-c5eaea81cfdd'
+WHERE first_name = 'Fernanda';
+
+UPDATE person
+SET car_uid = '09a49464-5577-4d15-a69b-b2ffded76208'
+WHERE first_name = 'john';
+
+
+SELECT person.*
+FROM person
+LEFT JOIN car ON person.car_uid = car.car_uid;
+
+SELECT car.*
+FROM person
+LEFT JOIN car ON person.car_uid = car.car_uid;
+
+SELECT *
+FROM person
+LEFT JOIN car ON person.car_uid = car.car_uid;
+
+SELECT
+    person.first_name,
+    person.last_name,
+    car.make,
+    car.model,
+    car.price
+FROM person
+LEFT JOIN car ON person.car_uid = car.car_uid;
+
 ```
